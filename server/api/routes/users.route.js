@@ -9,8 +9,12 @@ const {
 const router = Router();
 
 router.get('/', (req, res, next) => {
+  console.log(req.baseUrl);
   getAllUsers()
-    .then(users => res.send(users))
+    .then(users => {
+      console.log()
+      return res.send(users)
+    })
     .catch(next);
 });
 

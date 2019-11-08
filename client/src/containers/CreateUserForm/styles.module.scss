@@ -1,0 +1,16 @@
+:global(.ui.container .ui.form ) {
+  :global(.field.error input), :global(.field .ui.input.error input) {
+    border-color: #ed1a37;
+    background: #ffffff;
+  }
+  :global(.field.error) {
+    margin: 0 0 0.3em;
+  }
+}
+
+:local(.inputError) {
+  color: #ed1a37;
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-size: 0.7em;
+}

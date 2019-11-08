@@ -32,6 +32,6 @@ module.exports = {
 
   down: queryInterface => queryInterface.sequelize
     .transaction(transaction => Promise.all([
-      queryInterface.dropTable('recipes', { transaction })
+      queryInterface.dropTable('users', { transaction })
     ]))
 };
