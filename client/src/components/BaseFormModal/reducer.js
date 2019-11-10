@@ -1,16 +1,17 @@
-import { createUser, modalVisibility } from '../../routines';
+import { createUser, modalVisibility, updateUser } from '../../routines';
 
-const initialCreateUserState = {
+const initialResponseState = {
   response: null,
   loading: false,
   error: null
 };
 
 const initialModalState = {
-  isModalOpen: false
+  isModalOpen: false,
+  editingUser: null
 };
 
-export const createUserData = (state = initialCreateUserState, action) => {
+export const createUserData = (state = initialResponseState, action) => {
   switch (action.type) {
   case createUser.TRIGGER:
     return {
@@ -37,13 +38,41 @@ export const createUserData = (state = initialCreateUserState, action) => {
   }
 };
 
+export const updateUserData = (state = initialResponseState, action) => {
+  switch (action.type) {
+  case updateUser.TRIGGER:
+    return {
+      ...state,
+      loading: true
+    };
+  case updateUser.SUCCESS:
+    return {
+      ...state,
+      response: action.payload
+    };
+  case updateUser.FAILURE:
+    return {
+      ...state,
+      error: action.payload
+    };
+  case updateUser.FULFILL:
+    return {
+      ...state,
+      loading: false
+    };
+  default:
+    return state;
+  }
+};
+
 export const modalData = (state = initialModalState, action) => {
   switch (action.type) {
   case modalVisibility:
     console.log(action);
     return {
       ...state,
-      isModalOpen: action.payload
+      isModalOpen: action.payload.value,
+      editingUser: action.payload.editingUser
     };
   default:
     return state;

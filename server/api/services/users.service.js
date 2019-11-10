@@ -4,7 +4,7 @@ const getAllUsers = () => userRepository.getAll();
 
 const createUser = body => userRepository.create(body);
 
-const updateUser = (userId, body) => recipesRepository.updateById(recipeId, body);
+const updateUser = (userId, body) => userRepository.updateById(userId, body);
 
 const deleteSelectedUsers =  userIds =>  userRepository.deleteByIds(userIds);
 

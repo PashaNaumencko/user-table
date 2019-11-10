@@ -20,6 +20,14 @@ class BaseFormModal extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { user } = this.props;
+    if(user) {
+      const { user: { gender } } = this.props;
+      this.setState({ selectedGender: gender });
+    }
+  }
+
   validateRadioButton = () => this.state.selectedGender ? undefined : 'Select a gender';
 
   onRadioChange = (validateField) => (e, { value }) => {
@@ -36,9 +44,10 @@ class BaseFormModal extends React.Component {
   onSubmit = (values, { resetForm }) => {
     const { createUser, updateUser, user, setModalVisibility } = this.props;
     const { selectedGender, selectedTelCode } = this.state;
-    if (user.length) {
+    if (user) {
       updateUser({
         ...values,
+        id: user.id,
         phone: `(${selectedTelCode})${values.phone}`,
         gender: selectedGender,
         setModalVisibility
@@ -55,29 +64,30 @@ class BaseFormModal extends React.Component {
   };
 
   render() {
-    const { selectedGender } = this.state;
+    const { selectedGender, selectedTelCode } = this.state;
     const {
       createUserLoading,
+      updateUserLoading,
       user,
       isModalOpen
     } = this.props;
-    const { firstName, lastName, phone, gender, age } = user;
-    const loading = createUserLoading;
-
-    console.log(this.props + ' props');
+    const { firstName, lastName, phone, age } = user;
+    // console.log(this.props, 'props');
+    // console.log(this.state, 'state');
+    const loading = createUserLoading || updateUserLoading;
 
     return (
       <Modal open={isModalOpen} closeOnEscape>
-        <Modal.Header>{user ? 'Add New User' : 'Edit Existing User'}</Modal.Header>
+        <Modal.Header>{user ? 'Edit Existing User' : 'Add New User'}</Modal.Header>
         <Modal.Content>
           <Segment basic>
             <Formik
               initialValues={{
-                firstName,
-                lastName,
-                phone,
-                gender,
-                age
+                firstName: firstName || '',
+                lastName: lastName || '',
+                phone: phone || '',
+                gender: selectedGender,
+                age: age || ''
               }}
               validationSchema={FormSchema}
               onSubmit={this.onSubmit}
@@ -115,6 +125,7 @@ class BaseFormModal extends React.Component {
                       name='phone'
                       placeholder='Enter your phone number'
                       onTelCodeChange={this.onTelCodeChange}
+                      selectedTelCode={selectedTelCode}
                       component={PhoneField}
                       loading={loading}
                     />
@@ -166,7 +177,7 @@ class BaseFormModal extends React.Component {
                     <InputError name='age' />
                   </UIForm.Field>
                   <Button type='button' basic color='black' size='large' onClick={this.onModalClose}>Cancel</Button>
-                  <Button type='submit' color='green' size='large' loading={createUserLoading}>Submit</Button>
+                  <Button type='submit' color='green' size='large' loading={loading}>Submit</Button>
                 </Form>
               )}
             </Formik>
@@ -177,15 +188,15 @@ class BaseFormModal extends React.Component {
   }
 }
 
-BaseFormModal.defaultProps = {
-  user: {
-    firstName: '',
-    lastName: '',
-    phone: '',
-    gender: '',
-    age: '',
-  }
-};
+// BaseFormModal.defaultProps = {
+//   user: {
+//     firstName: '',
+//     lastName: '',
+//     phone: '',
+//     gender: '',
+//     age: '',
+//   }
+// };
 
 // CreateUserForm.propTypes = {
 //   fetchAllRecipes: PropTypes.func,
@@ -195,10 +206,13 @@ BaseFormModal.defaultProps = {
 
 const mapStateToProps = ({
   createUserData: { loading: createUserLoading },
-  modalData: { isModalOpen }
+  updateUserData: { loading: updateUserLoading },
+  modalData: { isModalOpen, editingUser }
 }) => ({
   createUserLoading,
-  isModalOpen
+  updateUserLoading,
+  isModalOpen,
+  user: editingUser
 });
 
 const mapDispatchToProps = {

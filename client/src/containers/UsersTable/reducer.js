@@ -6,7 +6,7 @@ const initialFetchAllUsersState = {
   error: null
 };
 
-const initialDeleteUsersState = {
+const initialResponseState = {
   response: null,
   loading: false,
   error: null
@@ -40,7 +40,7 @@ export const fetchUsersData = (state = initialFetchAllUsersState, action) => {
 };
 
 
-export const deleteUsersData = (state = initialDeleteUsersState, action) => {
+export const deleteUsersData = (state = initialResponseState, action) => {
   switch (action.type) {
   case deleteUsers.TRIGGER:
     return {

@@ -21,8 +21,8 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
-router.put('/', (req, res, next) => {
-  const { id } = req.body;
+router.put('/:id', (req, res, next) => {
+  const { id } = req.params;
   updateUser(id, { ...req.body })
     .then((data) => res.send(data))
     .catch(next);

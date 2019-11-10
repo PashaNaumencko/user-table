@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Button, Icon, Header, Table, Loader, Form as UIForm } from 'semantic-ui-react';
-// import UpdateUserForm from '../../components/UpdateUserForm';
+import { BaseFormModal } from '../../components';
 import { fetchUsers, deleteUsers } from '../../routines';
+import { setModalVisibility } from '../../components/BaseFormModal/actions';
 
 import styles from './styles.module.scss';
 
@@ -13,8 +14,7 @@ class UsersTable extends React.Component {
 
     this.state = {
       allSelected: false,
-      selectedUserIds: [],
-      editingUser: {}
+      selectedUserIds: []
     };
   }
 
@@ -23,23 +23,42 @@ class UsersTable extends React.Component {
     fetchUsers();
   }
 
-  onAllSelect = () => this.setState((prevState) => ({ ...prevState, allSelected: !prevState.allSelected }));
+  onAllSelect = () => this.setState((prevState) => {
+    const { users } = this.props;
+    const { selectedUserIds } = this.state;
+    const updatedIdsArray = !prevState.allSelected ? users.map(user => user.id) : [];
+    console.log(updatedIdsArray);
+    //users.length === selectedUserIds.length
+    return {
+      ...prevState,
+      allSelected: Boolean(!prevState.allSelected && users.length === updatedIdsArray.length),
+      selectedUserIds: updatedIdsArray
+    };
+  });
 
-  isUserSelected = userId => this.state.allSelected
-    || this.state.selectedUserIds.some(selectedUserId => userId === selectedUserId);
+  isUserSelected = userId => this.state.selectedUserIds.some(selectedUserId => userId === selectedUserId);
 
   onUserSelect = (id) => () => {
+    const { users } = this.props;
     const { selectedUserIds } = this.state;
+    let updatedIdsArray;
     if(this.isUserSelected(id)) {
-      const updatedIdsArray = selectedUserIds.filter(selectedUserId => selectedUserId !== id);
-      this.setState({ selectedUserIds: updatedIdsArray });
+      updatedIdsArray = selectedUserIds.filter(selectedUserId => selectedUserId !== id);
+      this.setState({ selectedUserIds: updatedIdsArray, allSelected: false });
     }
     else {
-      this.setState({ selectedUserIds: [...selectedUserIds, id] });
+      updatedIdsArray = [...selectedUserIds, id];
+      this.setState({
+        selectedUserIds: updatedIdsArray,
+        allSelected: users.length === updatedIdsArray.length
+      });
     }
   };
 
-  onEditClick = (user) => () => this.setState({ editingUser: user });
+  onEditClick = (user) => () => {
+    this.props.setModalVisibility(true, user);
+    // this.setState({ editingUser: user });
+  };
 
   onCancelClick = () => this.setState({ editingUserId: null });
 
@@ -48,15 +67,14 @@ class UsersTable extends React.Component {
     const { deleteUsers } = this.props;
     if(selectedUserIds.length) {
       deleteUsers(selectedUserIds);
-      this.setState({ selectedUserId: [] });
+      this.setState({ selectedUserId: [], allSelected: false });
     }
   };
 
   render() {
-    const { allSelected, selectedUserIds, editingUser } = this.state;
+    const { allSelected, selectedUserIds } = this.state;
     const { users, fetchUsersLoading, deleteUsersLoading } = this.props;
-
-    console.log(editingUser);
+    const isIndeterminate = Boolean(selectedUserIds.length && users.length !== selectedUserIds.length);
 
     return fetchUsersLoading ? (
       <div>
@@ -72,6 +90,7 @@ class UsersTable extends React.Component {
                   <UIForm.Checkbox
                     onChange={this.onAllSelect}
                     checked={allSelected}
+                    indeterminate={isIndeterminate}
                   />
                 ) : null}
               </Table.HeaderCell>
@@ -131,6 +150,7 @@ class UsersTable extends React.Component {
             </Table.Row>
           </Table.Footer>
         </Table>
+        {/* {editingUser ? <BaseFormModal user={editingUser} /> : null} */}
       </Segment>
     );
   }
@@ -153,7 +173,8 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = {
   fetchUsers,
-  deleteUsers
+  deleteUsers,
+  setModalVisibility
 };
 
 export default connect(

@@ -18,11 +18,10 @@ export const createUser = async (request) => {
 };
 
 export const updateUser = async (request) => {
-  const { userId } = request;
+  const { id } = request;
   const response = await callWebApi({
-    endpoint: `/api/users/${userId}`,
+    endpoint: `/api/users/${id}`,
     type: 'PUT',
-    attachment: true,
     request
   });
   return response.json();
