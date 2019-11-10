@@ -1,4 +1,4 @@
-import { fetchUsers } from '../../routines';
+import { fetchUsers, deleteUsers } from '../../routines';
 
 const initialFetchAllUsersState = {
   users: [],
@@ -6,6 +6,11 @@ const initialFetchAllUsersState = {
   error: null
 };
 
+const initialDeleteUsersState = {
+  response: null,
+  loading: false,
+  error: null
+};
 
 export const fetchUsersData = (state = initialFetchAllUsersState, action) => {
   switch (action.type) {
@@ -25,6 +30,34 @@ export const fetchUsersData = (state = initialFetchAllUsersState, action) => {
       error: action.payload
     };
   case fetchUsers.FULFILL:
+    return {
+      ...state,
+      loading: false
+    };
+  default:
+    return state;
+  }
+};
+
+
+export const deleteUsersData = (state = initialDeleteUsersState, action) => {
+  switch (action.type) {
+  case deleteUsers.TRIGGER:
+    return {
+      ...state,
+      loading: true
+    };
+  case deleteUsers.SUCCESS:
+    return {
+      ...state,
+      response: action.payload
+    };
+  case deleteUsers.FAILURE:
+    return {
+      ...state,
+      error: action.payload
+    };
+  case deleteUsers.FULFILL:
     return {
       ...state,
       loading: false

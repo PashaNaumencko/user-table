@@ -7,12 +7,13 @@ function* createUserRequest({ payload }) {
     yield put(createUser.request());
     const createUserResponse = yield call(userService.createUser, payload);
     yield put(createUser.success(createUserResponse));
-    const fetchUsersResponse = yield call(userService.getAllUsers, payload.title);
+    const fetchUsersResponse = yield call(userService.getAllUsers);
     yield put(fetchUsers.success(fetchUsersResponse));
   } catch (error) {
     yield put(createUser.failure(error.message));
   } finally {
     yield put(createUser.fulfill());
+    payload.setModalVisibility(false);
   }
 }
 

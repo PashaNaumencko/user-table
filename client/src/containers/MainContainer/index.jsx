@@ -1,19 +1,44 @@
-import React from 'react';
-import { Grid, Container } from 'semantic-ui-react';
-import CreateUserForm from '../CreateUserForm';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Container, Button, Icon, Header } from 'semantic-ui-react';
+import { BaseFormModal } from '../../components';
+import { setModalVisibility } from '../../components/BaseFormModal/actions';
 import UsersTable from '../UsersTable';
 
-const MainContainer = () => (
-  <Container>
-    <Grid>
-      <Grid.Column computer={6} tablet={8} mobile={16}>
-        <CreateUserForm />
-      </Grid.Column>
-      <Grid.Column computer={10} tablet={8} mobile={16}>
-        <UsersTable />
-      </Grid.Column>
-    </Grid>
-  </Container>
-);
+import styles from './styles.module.scss';
 
-export default MainContainer;
+const MainContainer = ({ setModalVisibility, isModalOpen }) => {
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const onModalOpen = () => setModalVisibility(true);
+
+
+  return (
+    <Container>
+      <div className={styles.mainHeading}>
+        <Header as='h2' size='large' content='Users Table' textAlign='center' />
+        <Button
+          onClick={onModalOpen}
+          content='Add new user'
+          color='green'
+          icon={<Icon name='plus'/>}
+        />
+        {isModalOpen ? <BaseFormModal /> : null}
+      </div>
+      <UsersTable />
+    </Container>
+  );
+};
+
+const mapStateToProps = ({
+  modalData: { isModalOpen }
+}) => ({ isModalOpen });
+
+const mapDispatchToProps = {
+  setModalVisibility
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainContainer);

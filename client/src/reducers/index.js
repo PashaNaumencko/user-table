@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import { createUserData } from '../containers/CreateUserForm/reducer';
-import { fetchUsersData } from '../containers/UsersTable/reducer';
+import { createUserData, modalData } from '../components/BaseFormModal/reducer';
+import { fetchUsersData, deleteUsersData } from '../containers/UsersTable/reducer';
 
 export default combineReducers({
   createUserData,
-  fetchUsersData
+  fetchUsersData,
+  deleteUsersData,
+  modalData
 });

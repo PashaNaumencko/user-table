@@ -1,10 +1,10 @@
 import { all } from 'redux-saga/effects';
-import createUserFormSagas from '../containers/CreateUserForm/sagas';
-import fetchAllUsersSagas from '../containers/UsersTable/sagas';
+import FormSagas from '../components/BaseFormModal/sagas';
+import UsersTableSagas from '../containers/UsersTable/sagas';
 
 export default function* rootSaga() {
   yield all([
-    createUserFormSagas(),
-    fetchAllUsersSagas()
+    FormSagas(),
+    UsersTableSagas()
   ]);
 }

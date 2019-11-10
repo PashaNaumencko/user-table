@@ -1,0 +1,213 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Segment, Button, Modal, Form as UIForm} from 'semantic-ui-react';
+import { TextField, PhoneField, RadioButton, InputError } from '..';
+import { createUser, updateUser } from '../../routines';
+import { setModalVisibility } from './actions';
+import { Formik, Form, Field } from 'formik';
+import { FormSchema } from '../../helpers/constants';
+
+import styles from './styles.module.scss';
+
+class BaseFormModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedGender: null,
+      selectedTelCode: '+38'
+    };
+  }
+
+  validateRadioButton = () => this.state.selectedGender ? undefined : 'Select a gender';
+
+  onRadioChange = (validateField) => (e, { value }) => {
+    this.setState({ selectedGender: value });
+    validateField('gender');
+  };
+
+  onRadioClick = (validateField) => () => validateField('gender');
+
+  onTelCodeChange = (e, { value }) => this.setState({ selectedTelCode: value });
+
+  onModalClose = () => this.props.setModalVisibility(false);
+
+  onSubmit = (values, { resetForm }) => {
+    const { createUser, updateUser, user, setModalVisibility } = this.props;
+    const { selectedGender, selectedTelCode } = this.state;
+    if (user.length) {
+      updateUser({
+        ...values,
+        phone: `(${selectedTelCode})${values.phone}`,
+        gender: selectedGender,
+        setModalVisibility
+      });
+    } else {
+      createUser({
+        ...values,
+        phone: `(${selectedTelCode})${values.phone}`,
+        gender: selectedGender,
+        setModalVisibility
+      });
+    }
+
+  };
+
+  render() {
+    const { selectedGender } = this.state;
+    const {
+      createUserLoading,
+      user,
+      isModalOpen
+    } = this.props;
+    const { firstName, lastName, phone, gender, age } = user;
+    const loading = createUserLoading;
+
+    console.log(this.props + ' props');
+
+    return (
+      <Modal open={isModalOpen} closeOnEscape>
+        <Modal.Header>{user ? 'Add New User' : 'Edit Existing User'}</Modal.Header>
+        <Modal.Content>
+          <Segment basic>
+            <Formik
+              initialValues={{
+                firstName,
+                lastName,
+                phone,
+                gender,
+                age
+              }}
+              validationSchema={FormSchema}
+              onSubmit={this.onSubmit}
+            >
+              {({ errors, touched, validateField }) => (
+                <Form className='ui form large'>
+                  <UIForm.Field required>
+                    <label htmlFor='firstName'>First Name</label>
+                    <Field
+                      id='firstName'
+                      name='firstName'
+                      type='text'
+                      placeholder='Enter your first name'
+                      component={TextField}
+                      loading={loading}
+                    />
+                    <InputError name='firstName' />
+                  </UIForm.Field>
+                  <UIForm.Field required>
+                    <label htmlFor='lastName'>Last Name</label>
+                    <Field
+                      id='lastName'
+                      name='lastName'
+                      placeholder='Enter your last name'
+                      component={TextField}
+                      loading={loading}
+                    />
+                    <InputError name='lastName' />
+                  </UIForm.Field>
+
+                  <UIForm.Field required>
+                    <label htmlFor='phoneNumber'>Phone number</label>
+                    <Field
+                      id='phoneNumber'
+                      name='phone'
+                      placeholder='Enter your phone number'
+                      onTelCodeChange={this.onTelCodeChange}
+                      component={PhoneField}
+                      loading={loading}
+                    />
+                    <InputError name='phone' />
+                  </UIForm.Field>
+
+                  <UIForm.Group inline>
+                    <UIForm.Field required>
+                      <label>Gender</label>
+                    </UIForm.Field>
+
+                    <Field
+                      name='gender'
+                      label='Male'
+                      value='Male'
+                      checked={selectedGender === 'Male'}
+                      error={errors.gender && touched.gender}
+                      onClick={this.onRadioClick(validateField)}
+                      onChange={this.onRadioChange(validateField)}
+                      component={RadioButton}
+                      validate={this.validateRadioButton}
+                      loading={loading}
+                    />
+
+                    <Field
+                      name='gender'
+                      label='Female'
+                      value='Female'
+                      checked={selectedGender === 'Female'}
+                      error={errors.gender && touched.gender}
+                      onClick={this.onRadioClick(validateField)}
+                      onChange={this.onRadioChange(validateField)}
+                      component={RadioButton}
+                      validate={this.validateRadioButton}
+                      loading={loading}
+                    />
+                  </UIForm.Group>
+                  {errors.gender && touched.gender && <div className={styles.inputError}>{errors.gender}</div>}
+
+                  <UIForm.Field required>
+                    <label htmlFor='age'>Age</label>
+                    <Field
+                      id='age'
+                      name='age'
+                      placeholder='Enter your age'
+                      component={TextField}
+                      loading={loading}
+                    />
+                    <InputError name='age' />
+                  </UIForm.Field>
+                  <Button type='button' basic color='black' size='large' onClick={this.onModalClose}>Cancel</Button>
+                  <Button type='submit' color='green' size='large' loading={createUserLoading}>Submit</Button>
+                </Form>
+              )}
+            </Formik>
+          </Segment>
+        </Modal.Content>
+      </Modal>
+    );
+  }
+}
+
+BaseFormModal.defaultProps = {
+  user: {
+    firstName: '',
+    lastName: '',
+    phone: '',
+    gender: '',
+    age: '',
+  }
+};
+
+// CreateUserForm.propTypes = {
+//   fetchAllRecipes: PropTypes.func,
+//   recipes: PropTypes.array,
+//   allRecipesLoading: PropTypes.bool
+// };
+
+const mapStateToProps = ({
+  createUserData: { loading: createUserLoading },
+  modalData: { isModalOpen }
+}) => ({
+  createUserLoading,
+  isModalOpen
+});
+
+const mapDispatchToProps = {
+  createUser,
+  updateUser,
+  setModalVisibility
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BaseFormModal);

@@ -1,1 +1,13 @@
-
+.ui.page .ui.form {
+  .field .ui.input.error input {
+    border-color: #ed1a37;
+    background: #ffffff;
+  }
+  .field.error {
+    margin: 0 0 0.3em;
+    input {
+      border-color: #ed1a37;
+      background: #ffffff;
+    }
+  }
+}

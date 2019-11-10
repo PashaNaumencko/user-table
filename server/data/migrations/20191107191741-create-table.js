@@ -20,7 +20,7 @@ module.exports = {
           type: Sequelize.STRING
         },
         gender: {
-          type: Sequelize.ENUM('male', 'female')
+          type: Sequelize.ENUM('Male', 'Female')
         },
         age: {
           type: Sequelize.INTEGER
