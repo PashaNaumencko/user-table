@@ -96,7 +96,7 @@ class BaseFormModal extends React.Component {
     const loading = createUserLoading || updateUserLoading;
 
     return (
-      <Modal open={isModalOpen}>
+      <Modal open={isModalOpen} size='large'>
         <Modal.Header>{user ? 'Edit Existing User' : 'Add New User'}</Modal.Header>
         <Modal.Content>
           <Segment basic>
