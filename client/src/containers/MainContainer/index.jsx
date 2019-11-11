@@ -29,6 +29,11 @@ const MainContainer = ({ setModalVisibility, isModalOpen }) => {
   );
 };
 
+MainContainer.propTypes = {
+  setModalVisibility: PropTypes.func,
+  isModalOpen: PropTypes.bool
+};
+
 const mapStateToProps = ({
   modalData: { isModalOpen }
 }) => ({ isModalOpen });

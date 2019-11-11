@@ -22,4 +22,12 @@ const TextField = ({ field, form: { touched, errors }, placeholder, loading }) =
   );
 };
 
+TextField.propTypes = {
+  field: PropTypes.object,
+  touched: PropTypes.object,
+  errors: PropTypes.object,
+  placeholder: PropTypes.string,
+  loading: PropTypes.bool
+};
+
 export default TextField;

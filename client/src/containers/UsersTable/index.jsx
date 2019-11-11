@@ -189,11 +189,15 @@ class UsersTable extends React.Component {
   }
 }
 
-// UsersTable.propTypes = {
-//   fetchAllRecipes: PropTypes.func,
-//   recipes: PropTypes.array,
-//   allRecipesLoading: PropTypes.bool
-// };
+UsersTable.propTypes = {
+  fetchUsers: PropTypes.func,
+  deleteUsers: PropTypes.func,
+  setModalVisibility: PropTypes.func,
+  sortUsers: PropTypes.func,
+  users: PropTypes.array,
+  fetchUsersLoading: PropTypes.bool,
+  deleteUsersLoading: PropTypes.bool
+};
 
 const mapStateToProps = ({
   fetchUsersData: { loading: fetchUsersLoading, users },

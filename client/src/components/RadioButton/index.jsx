@@ -9,7 +9,15 @@ const RadioButton = ({ value, label, error, checked, onChange, loading }) => <UI
   disabled={loading}
   onChange={onChange}
   checked={checked}
-  disabled={loading}
 />;
+
+RadioButton.propTypes = {
+  value: PropTypes.string,
+  label: PropTypes.string,
+  error: PropTypes.string,
+  checked: PropTypes.bool,
+  onChange: PropTypes.func,
+  loading: PropTypes.bool
+};
 
 export default RadioButton;

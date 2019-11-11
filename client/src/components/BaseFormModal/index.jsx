@@ -79,8 +79,6 @@ class BaseFormModal extends React.Component {
       user,
       isModalOpen
     } = this.props;
-    // console.log(this.props, 'props');
-    // console.log(this.state, 'state');
     const loading = createUserLoading || updateUserLoading;
 
     return (
@@ -194,11 +192,15 @@ class BaseFormModal extends React.Component {
   }
 }
 
-// CreateUserForm.propTypes = {
-//   fetchAllRecipes: PropTypes.func,
-//   recipes: PropTypes.array,
-//   allRecipesLoading: PropTypes.bool
-// };
+BaseFormModal.propTypes = {
+  createUser: PropTypes.func,
+  updateUser: PropTypes.func,
+  setModalVisibility: PropTypes.func,
+  user: PropTypes.object,
+  isModalOpen: PropTypes.bool,
+  createUserLoading: PropTypes.bool,
+  updateUserLoading: PropTypes.bool
+};
 
 const mapStateToProps = ({
   createUserData: { loading: createUserLoading },

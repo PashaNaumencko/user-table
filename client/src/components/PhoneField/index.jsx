@@ -30,4 +30,14 @@ const PhoneField = ({ field, form: { touched, errors }, placeholder, loading, on
   );
 };
 
+PhoneField.propTypes = {
+  field: PropTypes.object,
+  touched: PropTypes.object,
+  errors: PropTypes.object,
+  placeholder: PropTypes.string,
+  loading: PropTypes.bool,
+  onTelCodeChange: PropTypes.func,
+  selectedTelCode: PropTypes.string
+};
+
 export default PhoneField;
