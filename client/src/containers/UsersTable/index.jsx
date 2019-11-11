@@ -91,10 +91,10 @@ class UsersTable extends React.Component {
       </div>
     ) : (
       <Segment basic>
-        <Table striped padded sortable singleLine size='large'>
+        <Table celled padded sortable singleLine size='large'>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
+              <Table.HeaderCell textAlign='center'>
                 {users.length ? (
                   <UIForm.Checkbox
                     onChange={this.onAllSelect}
@@ -140,7 +140,7 @@ class UsersTable extends React.Component {
           <Table.Body>
             {users.map((user, idx) => (
               <Table.Row key={idx}>
-                <Table.Cell>
+                <Table.Cell textAlign='center'>
                   <UIForm.Checkbox
                     checked={this.isUserSelected(user.id)}
                     onChange={this.onUserSelect(user.id)}
@@ -151,7 +151,7 @@ class UsersTable extends React.Component {
                 <Table.Cell>{user.phone}</Table.Cell>
                 <Table.Cell>{user.gender}</Table.Cell>
                 <Table.Cell>{user.age}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell textAlign='center'>
                   <Button type='button' icon={<Icon name='edit' />} onClick={this.onEditClick(user)} />
                 </Table.Cell>
               </Table.Row>
