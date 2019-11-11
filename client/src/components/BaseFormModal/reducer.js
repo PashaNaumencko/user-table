@@ -68,7 +68,6 @@ export const updateUserData = (state = initialResponseState, action) => {
 export const modalData = (state = initialModalState, action) => {
   switch (action.type) {
   case modalVisibility:
-    console.log(action);
     return {
       ...state,
       isModalOpen: action.payload.value,

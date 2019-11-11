@@ -15,6 +15,7 @@ const defaultFormValues = {
   firstName: '',
   lastName: '',
   phone: '',
+  gender: '',
   age: '',
 };
 
@@ -129,7 +130,7 @@ class BaseFormModal extends React.Component {
                       name='phone'
                       placeholder='Enter your phone number'
                       onTelCodeChange={this.onTelCodeChange}
-                      selectedTelCode={user ? getTelCode(user.phone) : selectedTelCode}
+                      selectedTelCode={user && getTelCode(user.phone) ? getTelCode(user.phone)[0] : selectedTelCode}
                       component={PhoneField}
                       loading={loading}
                     />

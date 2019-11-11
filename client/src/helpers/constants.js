@@ -15,6 +15,7 @@ export const FormSchema = Yup.object().shape({
       'Phone number is not valid'
     )
     .required('Required'),
+  gender: Yup.string(),
   age: Yup.string()
     .matches(
       /^\d+$/,
