@@ -35,6 +35,19 @@ class BaseFormModal extends React.Component {
       const { user: { gender } } = this.props;
       this.setState({ selectedGender: gender });
     }
+
+    document.addEventListener('keydown', this.onEscapePress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onEscapePress);
+  }
+
+  onEscapePress = (event) => {
+    const { setModalVisibility } = this.props;
+    if(event.keyCode === 27) {
+      setModalVisibility(false);
+    }
   }
 
   validateRadioButton = () => this.state.selectedGender ? undefined : 'Select a gender';
@@ -50,7 +63,7 @@ class BaseFormModal extends React.Component {
 
   onModalClose = () => this.props.setModalVisibility(false);
 
-  onSubmit = (values, { resetForm }) => {
+  onSubmit = (values) => {
     const { createUser, updateUser, user, setModalVisibility } = this.props;
     const { selectedGender, selectedTelCode } = this.state;
     if (user) {
@@ -83,7 +96,7 @@ class BaseFormModal extends React.Component {
     const loading = createUserLoading || updateUserLoading;
 
     return (
-      <Modal open={isModalOpen} closeOnEscape>
+      <Modal open={isModalOpen}>
         <Modal.Header>{user ? 'Edit Existing User' : 'Add New User'}</Modal.Header>
         <Modal.Content>
           <Segment basic>

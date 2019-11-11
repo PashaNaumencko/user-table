@@ -1,6 +1,4 @@
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -13,15 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// const staticPath = path.resolve(`${__dirname}/../client/build`);
-// app.use(express.static(staticPath));
 routes(app);
-
-// app.get('*', (req, res) => {
-//   res.write(fs.readFileSync(`${__dirname}/../client/build/index.html`));
-//   res.end();
-// });
 
 const port = 3000;
 

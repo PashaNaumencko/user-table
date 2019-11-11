@@ -19,8 +19,10 @@ export const FormSchema = Yup.object().shape({
   age: Yup.string()
     .matches(
       /^\d+$/,
-      'Age should be a number'
+      'Age should be a positive number'
     )
+    .max(3, 'Very large value')
+    .test('age', 'Age should be non-zero value', value => Number(value) !== 0)
     .required('Required'),
 });
 
