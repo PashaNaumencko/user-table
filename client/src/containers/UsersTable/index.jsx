@@ -2,11 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Button, Icon, Header, Table, Loader, Form as UIForm } from 'semantic-ui-react';
-import { BaseFormModal } from '../../components';
 import { fetchUsers, deleteUsers } from '../../routines';
 import { setModalVisibility } from '../../components/BaseFormModal/actions';
+import { sortUsers } from './actions';
 
-import styles from './styles.module.scss';
 
 class UsersTable extends React.Component {
   constructor(props) {
@@ -14,7 +13,9 @@ class UsersTable extends React.Component {
 
     this.state = {
       allSelected: false,
-      selectedUserIds: []
+      selectedUserIds: [],
+      sortedColumn: null,
+      sortingDirection : 'ascending'
     };
   }
 
@@ -25,10 +26,7 @@ class UsersTable extends React.Component {
 
   onAllSelect = () => this.setState((prevState) => {
     const { users } = this.props;
-    const { selectedUserIds } = this.state;
     const updatedIdsArray = !prevState.allSelected ? users.map(user => user.id) : [];
-    console.log(updatedIdsArray);
-    //users.length === selectedUserIds.length
     return {
       ...prevState,
       allSelected: Boolean(!prevState.allSelected && users.length === updatedIdsArray.length),
@@ -55,10 +53,21 @@ class UsersTable extends React.Component {
     }
   };
 
-  onEditClick = (user) => () => {
-    this.props.setModalVisibility(true, user);
-    // this.setState({ editingUser: user });
+  onColumnSort = (clickedColumn) => () => {
+    const { sortedColumn, sortingDirection } = this.state;
+    const { sortUsers } = this.props;
+
+    if (sortedColumn !== clickedColumn) {
+      this.setState({ sortedColumn: clickedColumn, direction: 'ascending' });
+      sortUsers(clickedColumn);
+      return;
+    }
+
+    this.setState({ sortingDirection: sortingDirection === 'ascending' ? 'descending' : 'ascending' });
+    sortUsers(clickedColumn, 'descending');
   };
+
+  onEditClick = (user) => () => this.props.setModalVisibility(true, user);
 
   onCancelClick = () => this.setState({ editingUserId: null });
 
@@ -67,14 +76,14 @@ class UsersTable extends React.Component {
     const { deleteUsers } = this.props;
     if(selectedUserIds.length) {
       deleteUsers(selectedUserIds);
-      this.setState({ selectedUserId: [], allSelected: false });
+      this.setState({ selectedUserIds: [], allSelected: false });
     }
   };
 
   render() {
-    const { allSelected, selectedUserIds } = this.state;
+    const { allSelected, selectedUserIds, sortedColumn, sortingDirection } = this.state;
     const { users, fetchUsersLoading, deleteUsersLoading } = this.props;
-    const isIndeterminate = Boolean(selectedUserIds.length && users.length !== selectedUserIds.length);
+    const isIndeterminate = Boolean(selectedUserIds.length > 0 && users.length !== selectedUserIds.length);
 
     return fetchUsersLoading ? (
       <div>
@@ -94,11 +103,36 @@ class UsersTable extends React.Component {
                   />
                 ) : null}
               </Table.HeaderCell>
-              <Table.HeaderCell>First Name</Table.HeaderCell>
-              <Table.HeaderCell>Last Name</Table.HeaderCell>
-              <Table.HeaderCell>Phone</Table.HeaderCell>
-              <Table.HeaderCell>Gender</Table.HeaderCell>
-              <Table.HeaderCell>Age</Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortedColumn === 'firstName' ? sortingDirection : null}
+                onClick={this.onColumnSort('firstName')}
+              >
+                First Name
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortedColumn === 'lastName' ? sortingDirection : null}
+                onClick={this.onColumnSort('lastName')}
+              >
+                Last Name
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortedColumn === 'phone' ? sortingDirection : null}
+                onClick={this.onColumnSort('phone')}
+              >
+                Phone
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortedColumn === 'gender' ? sortingDirection : null}
+                onClick={this.onColumnSort('gender')}
+              >
+                Gender
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={sortedColumn === 'age' ? sortingDirection : null}
+                onClick={this.onColumnSort('age')}
+              >
+                Age
+              </Table.HeaderCell>
               <Table.HeaderCell />
             </Table.Row>
           </Table.Header>
@@ -150,17 +184,16 @@ class UsersTable extends React.Component {
             </Table.Row>
           </Table.Footer>
         </Table>
-        {/* {editingUser ? <BaseFormModal user={editingUser} /> : null} */}
       </Segment>
     );
   }
 }
 
-UsersTable.propTypes = {
-  fetchAllRecipes: PropTypes.func,
-  recipes: PropTypes.array,
-  allRecipesLoading: PropTypes.bool
-};
+// UsersTable.propTypes = {
+//   fetchAllRecipes: PropTypes.func,
+//   recipes: PropTypes.array,
+//   allRecipesLoading: PropTypes.bool
+// };
 
 const mapStateToProps = ({
   fetchUsersData: { loading: fetchUsersLoading, users },
@@ -174,7 +207,8 @@ const mapStateToProps = ({
 const mapDispatchToProps = {
   fetchUsers,
   deleteUsers,
-  setModalVisibility
+  setModalVisibility,
+  sortUsers
 };
 
 export default connect(

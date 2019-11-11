@@ -9,7 +9,6 @@ const {
 const router = Router();
 
 router.get('/', (req, res, next) => {
-  console.log(req.baseUrl);
   getAllUsers()
     .then(users => res.send(users))
     .catch(next);
@@ -29,8 +28,6 @@ router.put('/:id', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
-  console.log(req.method);
-  console.log(req.query);
   const { ids } = req.query;
   deleteSelectedUsers(ids)
     .then(() => res.send({ ids: ids }))

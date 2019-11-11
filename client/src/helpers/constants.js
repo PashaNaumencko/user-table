@@ -11,10 +11,9 @@ export const FormSchema = Yup.object().shape({
     .required('Required'),
   phone: Yup.string()
     .matches(
-      /^\(\\+[1-9]{1,4}\)[0-9]{10}$/,
+      /^[0-9]{10}$/,
       'Phone number is not valid'
     )
-    // .min(, 'Minimum length - 8 characters')
     .required('Required'),
   age: Yup.string()
     .matches(

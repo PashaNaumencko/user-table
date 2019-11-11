@@ -9,6 +9,14 @@ import { Formik, Form, Field } from 'formik';
 import { FormSchema } from '../../helpers/constants';
 
 import styles from './styles.module.scss';
+import { getTelCode, getPhoneNumber } from '../../helpers/phoneNumberHelper';
+
+const defaultFormValues = {
+  firstName: '',
+  lastName: '',
+  phone: '',
+  age: '',
+};
 
 class BaseFormModal extends React.Component {
   constructor(props) {
@@ -71,7 +79,6 @@ class BaseFormModal extends React.Component {
       user,
       isModalOpen
     } = this.props;
-    const { firstName, lastName, phone, age } = user;
     // console.log(this.props, 'props');
     // console.log(this.state, 'state');
     const loading = createUserLoading || updateUserLoading;
@@ -82,13 +89,12 @@ class BaseFormModal extends React.Component {
         <Modal.Content>
           <Segment basic>
             <Formik
-              initialValues={{
-                firstName: firstName || '',
-                lastName: lastName || '',
-                phone: phone || '',
-                gender: selectedGender,
-                age: age || ''
-              }}
+              initialValues={user ? {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: getPhoneNumber(user.phone),
+                age: user.age
+              } : defaultFormValues}
               validationSchema={FormSchema}
               onSubmit={this.onSubmit}
             >
@@ -125,7 +131,7 @@ class BaseFormModal extends React.Component {
                       name='phone'
                       placeholder='Enter your phone number'
                       onTelCodeChange={this.onTelCodeChange}
-                      selectedTelCode={selectedTelCode}
+                      selectedTelCode={user ? getTelCode(user.phone) : selectedTelCode}
                       component={PhoneField}
                       loading={loading}
                     />
@@ -187,16 +193,6 @@ class BaseFormModal extends React.Component {
     );
   }
 }
-
-// BaseFormModal.defaultProps = {
-//   user: {
-//     firstName: '',
-//     lastName: '',
-//     phone: '',
-//     gender: '',
-//     age: '',
-//   }
-// };
 
 // CreateUserForm.propTypes = {
 //   fetchAllRecipes: PropTypes.func,

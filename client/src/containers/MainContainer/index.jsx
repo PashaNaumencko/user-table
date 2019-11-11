@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Container, Button, Icon, Header } from 'semantic-ui-react';
 import { BaseFormModal } from '../../components';
 import { setModalVisibility } from '../../components/BaseFormModal/actions';
@@ -8,7 +9,6 @@ import UsersTable from '../UsersTable';
 import styles from './styles.module.scss';
 
 const MainContainer = ({ setModalVisibility, isModalOpen }) => {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const onModalOpen = () => setModalVisibility(true);
 
 

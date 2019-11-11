@@ -6,6 +6,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "formik": "^2.0.3",
+    "lodash.sortby": "^4.7.0",
     "node-sass": "^4.13.0",
     "query-string": "^6.8.3",
     "react": "^16.11.0",

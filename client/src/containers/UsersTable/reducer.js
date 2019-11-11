@@ -1,4 +1,5 @@
-import { fetchUsers, deleteUsers } from '../../routines';
+import { fetchUsers, deleteUsers, isUsersSorting } from '../../routines';
+import sortBy from 'lodash.sortby';
 
 const initialFetchAllUsersState = {
   users: [],
@@ -33,6 +34,17 @@ export const fetchUsersData = (state = initialFetchAllUsersState, action) => {
     return {
       ...state,
       loading: false
+    };
+  case isUsersSorting:
+    if(action.payload.direction === 'ascending')  {
+      return {
+        ...state,
+        users: sortBy(state.users, [action.payload.column])
+      };
+    }
+    return {
+      ...state,
+      users: [...state.users].reverse()
     };
   default:
     return state;
