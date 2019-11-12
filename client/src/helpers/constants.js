@@ -34,5 +34,5 @@ export const countryCodeOptions = [
   { key: 'bel', text: '+375', value: '+375' },
   { key: 'pl', text: '+48', value: '+48' },
   { key: 'ltv', text: '+371', value: '+371' },
-  { key: 'lith', text: '+370', value: '	+370' },
+  { key: 'lith', text: '+370', value: '+370' },
 ];
