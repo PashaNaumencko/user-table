@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Button, Icon, Header, Table, Loader, Form as UIForm } from 'semantic-ui-react';
 import { fetchUsers, deleteUsers } from '../../routines';
-import { setModalVisibility } from '../../components/BaseFormModal/actions';
+import { setModalVisibility } from '../../containers/BaseFormModal/actions';
 import { sortUsers } from './actions';
 
 

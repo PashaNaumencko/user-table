@@ -2,15 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Container, Button, Icon, Header } from 'semantic-ui-react';
-import { BaseFormModal } from '../../components';
-import { setModalVisibility } from '../../components/BaseFormModal/actions';
+import BaseFormModal from '../BaseFormModal';
+import { setModalVisibility } from '../BaseFormModal/actions';
 import UsersTable from '../UsersTable';
 
 import styles from './styles.module.scss';
 
 const MainContainer = ({ setModalVisibility, isModalOpen }) => {
   const onModalOpen = () => setModalVisibility(true);
-
 
   return (
     <Container>
@@ -41,7 +40,6 @@ const mapStateToProps = ({
 const mapDispatchToProps = {
   setModalVisibility
 };
-
 
 export default connect(
   mapStateToProps,

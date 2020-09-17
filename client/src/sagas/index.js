@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import FormSagas from '../components/BaseFormModal/sagas';
+import FormSagas from '../containers/BaseFormModal/sagas';
 import UsersTableSagas from '../containers/UsersTable/sagas';
 
 export default function* rootSaga() {

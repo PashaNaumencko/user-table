@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Button, Modal, Form as UIForm} from 'semantic-ui-react';
-import { TextField, PhoneField, RadioButton, InputError } from '..';
+import { TextField, PhoneField, RadioButton, InputError } from '../../components';
 import { createUser, updateUser } from '../../routines';
 import { setModalVisibility } from './actions';
 import { Formik, Form, Field } from 'formik';
