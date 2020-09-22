@@ -1,4 +1,4 @@
-### React Datatable
+## React Datatable
 
 ## Функционал
 
