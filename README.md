@@ -15,7 +15,8 @@
 2. Redux
 3. Redux-Saga
 4. Semantic UI React
-5. SCSS
+5. Formik & Yup
+6. SCSS
 
 ## Сервер
 
